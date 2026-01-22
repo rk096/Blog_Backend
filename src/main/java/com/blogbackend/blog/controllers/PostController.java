@@ -56,10 +56,16 @@ public class PostController {
         return new ResponseEntity<PostDto>(posts,HttpStatus.OK);
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> posts = this.postService.getAllPost();
-        return new ResponseEntity<List<PostDto>>(posts,HttpStatus.OK);
+   @GetMapping("/posts")
+    public ResponseEntity<PostResponse> getAllPosts(
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = "Id", required = false) String sortBy,
+        @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        PostResponse postResponse = this.postService.getAllPost(pageNumber, pageSize, sortBy, sortDir);
+
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{postId}")
